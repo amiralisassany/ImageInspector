@@ -14,6 +14,9 @@ plugins = list(map(lambda x: x.replace(".py", ""), os.listdir('plugins/')))
 
 # API
 app = Flask(__name__)
+@app.route('/plugins',methods=["GET"])
+def plugins_r():
+    return jsonify(plugins)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -27,8 +30,9 @@ def upload():
         data = json.loads(data_field)
     except json.JSONDecodeError:
         return jsonify({'error': 'Invalid JSON in data field'}), 400
+
     if not data["plugin"].replace('.py','') in plugins:
-        return "Plugin does not exist."
+        return jsonify({'error': 'Plugin is missing'}), 400
  
     img = Image.open(file.stream)
     handler = Handler(data['plugin'],img,data['args'])
