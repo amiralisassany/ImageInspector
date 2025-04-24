@@ -1,7 +1,6 @@
 import base64
 import hashlib
 import random, string
-import os
 
 class utl:
     @staticmethod
